@@ -9,7 +9,7 @@ cargo install create-tauri-app --locked
 
 Make sure you have installed the prerequisites for your OS: https://tauri.app/start/prerequisites/, then run:
 ```
-  cd smart-trade
+  cd shivarthu-app
   cargo tauri android init
 ```
 
@@ -23,7 +23,6 @@ For Android development, run:
   cargo tauri android dev
 ```
 
-"hello.near"
 
 
 ## Tailwindcss
