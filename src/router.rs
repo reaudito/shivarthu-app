@@ -1,3 +1,4 @@
+use crate::components::signing::create_account::CreateAccount;
 use crate::components::signing::sign_in_form::SignInForm;
 use crate::pages::home::Home;
 use leptos::prelude::*;
@@ -10,6 +11,7 @@ pub fn RouterApp() -> impl IntoView {
             <Routes fallback=|| "Not Found.">
                 <Route path=path!("/") view=Home />
                 <Route path=path!("/sign-in") view=SignInForm />
+                <Route path=path!("/create-account") view=CreateAccount />
             </Routes>
         </Router>
     }

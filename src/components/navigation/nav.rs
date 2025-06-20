@@ -1,4 +1,4 @@
-use crate::components::navigation::account_nav::AccountNav;
+// use crate::components::navigation::account_nav::AccountNav;
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlElement};
@@ -101,26 +101,24 @@ fn navbar_items() -> impl IntoView {
                 }>
 
                     <a
-                        href="/page"
+                        href="/create-account"
                         class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
-                        "Page"
+                        "Create Account"
                     </a>
-
 
                 </div>
             </div>
 
-            <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-            <AccountNav/>
+            <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">// <AccountNav/>
             </div>
 
             <a
-            href="/sign-in"
-            class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-        >
-            "Sign In"
-        </a>
+                href="/sign-in"
+                class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+            >
+                "Sign In"
+            </a>
 
             <button
                 class="bg-gray-400 dark:bg-gray-600 text-white py-2 px-4 rounded-xl hover:bg-gray-500 dark:hover:bg-gray-500"

@@ -26,10 +26,10 @@ pub fn MilestoneTimeline() -> impl IntoView {
 pub fn Milestone(title: &'static str, date: &'static str, color: &'static str) -> impl IntoView {
     view! {
         <div class="relative">
-            <div class={format!(
+            <div class=format!(
                 "absolute -left-7 w-6 h-6 {} rounded-full border-4 border-white dark:border-gray-900",
                 color,
-            )}></div>
+            )></div>
             <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
                 <p class="text-gray-600 dark:text-gray-300 text-sm">{date}</p>

@@ -1,23 +1,18 @@
+use crate::components::common::global_state::GlobalState;
+use crate::components::navigation::nav::Nav;
+use crate::router::RouterApp;
 use leptos::task::spawn_local;
 use leptos::{ev::SubmitEvent, prelude::*};
+use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-use crate::components::navigation::nav::Nav;
 use wasm_bindgen::JsCast;
-use crate::router::RouterApp;
 use web_sys::{window, HtmlElement};
-use crate::components::common::global_state::GlobalState;
-use reactive_stores::Store;
-
-
-
 
 #[component]
 pub fn App() -> impl IntoView {
-
-
     provide_context(Store::new(GlobalState::default()));
-    
+
     let window = window().expect("should have a Window");
 
     // Check if the user prefers a dark color scheme

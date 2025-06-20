@@ -71,10 +71,10 @@ pub fn AccountNav() -> impl IntoView {
                                 move |_| copy(&full_id)
                             }>
                                 <Show
-                                    when={copied}
-                                    fallback={|| {
-                                        view! { <Icon icon={icondata::AiCopyOutlined} /> }
-                                    }}
+                                    when=copied
+                                    fallback=|| {
+                                        view! { <Icon icon=icondata::AiCopyOutlined /> }
+                                    }
                                 >
                                     Copied!
                                 </Show>

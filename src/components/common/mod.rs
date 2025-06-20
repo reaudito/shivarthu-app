@@ -1,2 +1,2 @@
-pub mod spinner;
 pub mod global_state;
+pub mod spinner;
