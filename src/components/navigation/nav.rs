@@ -107,6 +107,17 @@ fn navbar_items() -> impl IntoView {
                         "Create Account"
                     </a>
 
+                    <a
+                        href="/add-account"
+                        class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                        "Add Account"
+                    </a>
+
+
+
+
+
                 </div>
             </div>
 
