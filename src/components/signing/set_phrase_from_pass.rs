@@ -1,3 +1,4 @@
+use crate::components::common::global_state::{GlobalState, GlobalStateStoreFields};
 use crate::components::navigation::nav::Nav;
 use crate::components::signing::accounts_store::AccountStore;
 use codee::string::JsonSerdeCodec;
@@ -5,7 +6,10 @@ use leptos::ev::SubmitEvent;
 use leptos::prelude::*;
 use leptos_use::storage::use_local_storage;
 use magic_crypt::{new_magic_crypt, MagicCryptTrait};
+use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
+use subxt_core::utils::AccountId32;
+use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
 use thiserror::Error;
 
 #[derive(Error, Debug, Clone, Deserialize, Serialize)]
@@ -19,6 +23,11 @@ pub enum PhraseFromPassError {
 #[component]
 pub fn SetPhraseFromPass() -> impl IntoView {
     let (password, set_password) = signal(Ok("".to_string()));
+    let state = expect_context::<Store<GlobalState>>();
+
+    let account = state.account_state();
+    let mnemonic_phrase = state.mnemonic_phrase();
+    let phase_exists_in_state = state.phase_exists_in_state();
     let (account_store, _set_account_store, _reset_account_store) =
         use_local_storage::<AccountStore, JsonSerdeCodec>("account-store-state");
 
@@ -39,7 +48,15 @@ pub fn SetPhraseFromPass() -> impl IntoView {
         gloo::console::log!(format!("{:?}", account_store()));
         if let Some(hash) = account_store().hash {
             let mc = new_magic_crypt!(password().unwrap(), 256);
-            let _seed = mc.decrypt_base64_to_string(&hash).unwrap();
+            let seed = mc.decrypt_base64_to_string(&hash).unwrap();
+
+            let mnemonic = Mnemonic::parse(seed.clone()).unwrap();
+            let keypair = Keypair::from_phrase(&mnemonic, None).unwrap();
+            let account_address = keypair.public_key().to_account_id();
+            let account_string = format!("{}", account_address);
+            *account.write() = account_string;
+            *mnemonic_phrase.write() = Some(seed);
+            *phase_exists_in_state.write() = true;
         }
     };
     view! {

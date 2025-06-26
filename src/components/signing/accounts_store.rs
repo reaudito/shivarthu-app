@@ -1,3 +1,4 @@
+use reactive_stores::Store;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -16,12 +17,12 @@ impl Default for AccountStore {
 }
 
 // Does not get stored in local storage
-#[derive(Default, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Store, Serialize, Deserialize)]
 pub(super) struct PhraseStore {
     pub mnemonic_phrase: Option<String>,
 }
 
-#[derive(Default, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, Store, Serialize, Deserialize)]
 pub struct PhaseExists {
     pub phase_exists_in_state: bool,
 }

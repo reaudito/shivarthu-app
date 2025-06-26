@@ -1,3 +1,4 @@
+use crate::components::common::global_state::{GlobalState, GlobalStateStoreFields};
 use crate::components::navigation::nav::Nav;
 use crate::components::signing::accounts_store::AccountStore;
 use codee::string::JsonSerdeCodec;
@@ -5,11 +6,15 @@ use leptos::ev::SubmitEvent;
 use leptos::prelude::*;
 use leptos_use::storage::use_local_storage;
 use magic_crypt::{new_magic_crypt, MagicCryptTrait};
+use reactive_stores::Store;
 use subxt_core::utils::AccountId32;
 use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
 
 #[component]
 pub fn AddAccount() -> impl IntoView {
+    let state = expect_context::<Store<GlobalState>>();
+
+    let account = state.account_state();
     let (_account_store, set_account_store, _reset_account_store) =
         use_local_storage::<AccountStore, JsonSerdeCodec>("account-store-state");
     let (seed, set_seed) = signal("".to_string());
@@ -34,8 +39,10 @@ pub fn AddAccount() -> impl IntoView {
         } else {
             set_account_store.update(|acct| {
                 acct.hash = Some(base64);
-                acct.account_address = Some(account_string);
+                acct.account_address = Some(account_string.clone());
             });
+
+            *account.write() = account_string;
             set_form_submission(false);
         }
     };

@@ -1,6 +1,10 @@
 use crate::components::common::global_state::{GlobalState, GlobalStateStoreFields};
+use crate::components::signing::accounts_store::AccountStore;
+use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
+use leptos::task::spawn_local;
 use leptos_icons::*;
+use leptos_use::storage::use_local_storage;
 use reactive_stores::Store;
 use serde_wasm_bindgen::from_value;
 use wasm_bindgen::prelude::*;
@@ -20,30 +24,6 @@ pub fn AccountNav() -> impl IntoView {
     let state = expect_context::<Store<GlobalState>>();
 
     let account = state.account_state();
-
-    let fetch_pool: Action<(), ()> = Action::new_unsync(move |_| async move {
-        let result = invoke_without_args("get_account_id").await;
-
-        match from_value::<String>(result) {
-            Ok(account_id) => {
-                web_sys::console::log_1(&format!("accound_id: {}", account_id.clone()).into());
-                *account.write() = account_id;
-            }
-            Err(e) => {
-                web_sys::console::log_1(&format!("Failed to parse pools: {}", e).into());
-            }
-        }
-
-        // if let Some(account_id) = result.as_string() {
-        //     set_account_state.set(account_id);
-        // } else {
-        //     set_account_state.set("hello.near".to_string());
-        // }
-    });
-
-    Effect::new(move |_| {
-        fetch_pool.dispatch(());
-    });
 
     let UseClipboardReturn {
         is_supported,
