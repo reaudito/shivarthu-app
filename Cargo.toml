@@ -23,6 +23,8 @@ pulldown-cmark = "0.13.0"
 select = "0.6.0"
 serde_json = "1"
 gloo = "0.11.0"
+jsonrpsee-wasm-client = "0.24"
+jsonrpsee-core = "0.24"
 subxt = { version = "0.42.1", default-features = false, features = [
     "jsonrpsee",
     "web",
@@ -30,7 +32,9 @@ subxt = { version = "0.42.1", default-features = false, features = [
 subxt-core = "0.42.1"
 subxt-signer = "0.42.1"
 magic-crypt = "4.0.1"
+sp-core-hashing = "16.0.0"
 thiserror = "2.0.12"
+json = "0.12.4"
 
 [workspace]
 members = ["src-tauri"]

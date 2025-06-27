@@ -114,14 +114,11 @@ fn navbar_items() -> impl IntoView {
                         "Add Account"
                     </a>
 
-
-
-
-
                 </div>
             </div>
 
-            <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"> <AccountNav/>
+            <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                <AccountNav />
             </div>
 
             <a

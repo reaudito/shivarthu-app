@@ -1,7 +1,9 @@
 mod app;
 mod components;
+mod constants;
 mod pages;
 mod router;
+mod services;
 
 use app::*;
 use leptos::prelude::*;
