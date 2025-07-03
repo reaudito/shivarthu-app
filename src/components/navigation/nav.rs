@@ -114,6 +114,13 @@ fn navbar_items() -> impl IntoView {
                         "Add Account"
                     </a>
 
+                    <a
+                        href="/create-positive-externality-post"
+                        class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                        "Create Positive Externality Post"
+                    </a>
+
                 </div>
             </div>
 

@@ -30,7 +30,7 @@ pub fn CreatePositiveExternalityPost() -> impl IntoView {
     let (markdown, set_markdown) = signal(String::from(""));
     let (post_cid, set_post_cid) = signal(String::from(""));
 
-    let submit_action: Action<(String, WriteSignal<View>, WriteSignal<String>), (), LocalStorage> =
+    let submit_action: Action<(String, WriteSignal<View>, WriteSignal<String>), ()> =
         Action::new_unsync(
             |(details, set_current_view, set_post_cid): &(
                 String,
@@ -54,7 +54,7 @@ pub fn CreatePositiveExternalityPost() -> impl IntoView {
     };
 
     let cid_value = move || {
-        submit_action_value();
+        submit_action_value.get();
     };
 
     let render_view = move || {
@@ -94,7 +94,7 @@ pub fn CreatePositiveExternalityPost() -> impl IntoView {
                     </form>
                     <br />
                     <p class="text-gray-900 dark:text-white">
-                        {move || pending().then(|| "Loading...")}
+                        {move || pending.get().then(|| "Loading...")}
                     </p>
                     <p>{move || cid_value()}</p>
                 </div>
