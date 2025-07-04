@@ -1,6 +1,6 @@
 use crate::components::signing::add_account::AddAccount;
 use crate::components::signing::create_account::CreateAccount;
-use crate::components::signing::set_phrase_from_pass::SetPhraseFromPass;
+use crate::components::signing::enter_pass_with_nav::EnterPassWithNav;
 
 use crate::components::schelling_game::positive_externality::create_post::CreatePositiveExternalityPost;
 use crate::pages::home::Home;
@@ -15,7 +15,7 @@ pub fn RouterApp() -> impl IntoView {
                 <Route path=path!("/") view=Home />
                 // <Route path=path!("/sign-in") view=SignInForm />
                 <Route path=path!("/create-account") view=CreateAccount />
-                <Route path=path!("/sign-in") view=SetPhraseFromPass />
+                <Route path=path!("/sign-in") view=EnterPassWithNav />
                 <Route path=path!("/add-account") view=AddAccount />
                 <Route path=path!("/create-positive-externality-post") view=CreatePositiveExternalityPost />
             </Routes>

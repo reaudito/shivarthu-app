@@ -61,8 +61,7 @@ pub fn SetPhraseFromPass() -> impl IntoView {
     };
     view! {
         <>
-            <Nav />
-            <main class="p-6 max-w-2xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+        <main class="p-6 max-w-2xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
                 <div>
                     <form class="max-w-sm mx-auto" id="seed-submit-form" on:submit=submit_click>
                         <div class="mb-5">
