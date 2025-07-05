@@ -6,8 +6,8 @@ use leptos::prelude::*;
 pub fn EnterPassWithNav() -> impl IntoView {
     view! {
         <>
-         <Nav />
-         <SetPhraseFromPass />
+            <Nav />
+            <SetPhraseFromPass />
         </>
     }
 }

@@ -19,7 +19,5 @@ pub fn ExtensionSignIn(post_cid: String) -> impl IntoView {
             .create_positive_externality_post(content),
     );
 
-    view! {
-        <SignTransactionFn tx=tx />
-    }
+    view! { <SignTransactionFn tx=tx /> }
 }

@@ -515,9 +515,6 @@
   .collapse {
     visibility: collapse;
   }
-  .visible {
-    visibility: visible;
-  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -532,9 +529,6 @@
   .absolute {
     position: absolute;
   }
-  .fixed {
-    position: fixed;
-  }
   .relative {
     position: relative;
   }
@@ -543,9 +537,6 @@
   }
   .-left-7 {
     left: calc(var(--spacing) * -7);
-  }
-  .z-6 {
-    z-index: 6;
   }
   .container {
     width: 100%;
@@ -564,6 +555,12 @@
     @media (width >= 96rem) {
       max-width: 96rem;
     }
+  }
+  .m-0 {
+    margin: calc(var(--spacing) * 0);
+  }
+  .m-6 {
+    margin: calc(var(--spacing) * 6);
   }
   .mx-auto {
     margin-inline: auto;
@@ -604,9 +601,6 @@
   .block {
     display: block;
   }
-  .block\! {
-    display: block !important;
-  }
   .flex {
     display: flex;
   }
@@ -618,9 +612,6 @@
   }
   .inline {
     display: inline;
-  }
-  .inline-block {
-    display: inline-block;
   }
   .inline-flex {
     display: inline-flex;
@@ -704,9 +695,6 @@
     flex: 1;
   }
   .flex-shrink {
-    flex-shrink: 1;
-  }
-  .shrink {
     flex-shrink: 1;
   }
   .shrink-0 {
@@ -921,6 +909,9 @@
   .stroke-current {
     stroke: currentColor;
   }
+  .p-1 {
+    padding: calc(var(--spacing) * 1);
+  }
   .p-2 {
     padding: calc(var(--spacing) * 2);
   }
@@ -1083,10 +1074,6 @@
   .text-yellow-800 {
     color: var(--color-yellow-800);
   }
-  .ordinal {
-    --tw-ordinal: ordinal;
-    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
-  }
   .underline {
     text-decoration-line: underline;
   }
@@ -1149,9 +1136,6 @@
   .ease-in-out {
     --tw-ease: var(--ease-in-out);
     transition-timing-function: var(--ease-in-out);
-  }
-  .\[d��L�y�\19 n3�ED�\'�\14 \12 �\,\1 ��W�M�\=��H\14 ��ej�\1b �����Y��E��\8 �\&�\'�\14 \12 �\,\1 ��W�M�\=��P\<\2 \10 ��Ǫ�9��s\f Њ�\&\17 ɯ�g\'�\14 \12 �\,\1 ��W�M�\=���Kf\!\4 �C\19 \5 Ǻ�p\+���lD�a�\$\'�\14 \12 �\,\1 ��W�M�\=���1�W��׈3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��\7 2py\18 W\=��3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��v��\6 �\14 a��3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=���\|�PJ�ՙ�3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��jW�u��ẅ3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��j3�\]�ѡ��3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��җ\!\2 �\,W��3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=���u\>8��z��3���\%�b���\18 �\/�\2 \'�\14 \12 �\,\1 ��W�M�\=��\:�p\#�\] {
-    d��L�y�n3�ED�'��, �W�M�=��H��ej������Y��E���&�'��, �W�M�=��P<��Ǫ�9��sЊ�&ɯ�g'��, �W�M�=���Kf!�CǺ�p+���lD�a�$'��, �W�M�=���1�W��׈3���%�b����/�'��, �W�M�=��2pyW=��3���%�b����/�'��, �W�M�=��v���a��3���%�b����/�'��, �W�M�=���|�PJ�ՙ�3���%�b����/�'��, �W�M�=��jW�u��ẅ3���%�b����/�'��, �W�M�=��j3�]�ѡ��3���%�b����/�'��, �W�M�=��җ!�,W��3���%�b����/�'��, �W�M�=���u>8��z��3���%�b����/�'��, �W�M�=��: �p#�;
   }
   .hover\:bg-blue-600 {
     &:hover {
@@ -1422,9 +1406,24 @@
       background-color: var(--color-green-600);
     }
   }
+  .dark\:bg-green-900 {
+    &:where(.dark, .dark *) {
+      background-color: var(--color-green-900);
+    }
+  }
+  .dark\:bg-red-900 {
+    &:where(.dark, .dark *) {
+      background-color: var(--color-red-900);
+    }
+  }
   .dark\:bg-slate-800 {
     &:where(.dark, .dark *) {
       background-color: var(--color-slate-800);
+    }
+  }
+  .dark\:bg-yellow-900 {
+    &:where(.dark, .dark *) {
+      background-color: var(--color-yellow-900);
     }
   }
   .dark\:bg-gradient-to-r {
@@ -1470,9 +1469,19 @@
       color: var(--color-gray-400);
     }
   }
+  .dark\:text-green-200 {
+    &:where(.dark, .dark *) {
+      color: var(--color-green-200);
+    }
+  }
   .dark\:text-green-400 {
     &:where(.dark, .dark *) {
       color: var(--color-green-400);
+    }
+  }
+  .dark\:text-red-200 {
+    &:where(.dark, .dark *) {
+      color: var(--color-red-200);
     }
   }
   .dark\:text-red-400 {
@@ -1483,6 +1492,11 @@
   .dark\:text-white {
     &:where(.dark, .dark *) {
       color: var(--color-white);
+    }
+  }
+  .dark\:text-yellow-200 {
+    &:where(.dark, .dark *) {
+      color: var(--color-yellow-200);
     }
   }
   .dark\:text-yellow-300 {
@@ -1694,26 +1708,6 @@
   initial-value: 100%;
 }
 @property --tw-font-weight {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-ordinal {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-slashed-zero {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-figure {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-spacing {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-numeric-fraction {
   syntax: "*";
   inherits: false;
 }
