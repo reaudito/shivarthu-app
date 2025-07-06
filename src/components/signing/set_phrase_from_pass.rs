@@ -24,6 +24,7 @@ pub enum PhraseFromPassError {
 pub fn SetPhraseFromPass() -> impl IntoView {
     let (password, set_password) = signal(Ok("".to_string()));
     let state = expect_context::<Store<GlobalState>>();
+    let (error, set_error) = signal("".to_string());
 
     let account = state.account_state();
     let mnemonic_phrase = state.mnemonic_phrase();
@@ -43,27 +44,25 @@ pub fn SetPhraseFromPass() -> impl IntoView {
         };
         set_password(result);
     };
-    let submit_click = move |e: SubmitEvent| {
-        e.prevent_default();
-        gloo::console::log!(format!("{:?}", account_store()));
-        if let Some(hash) = account_store().hash {
-            let mc = new_magic_crypt!(password().unwrap(), 256);
-            let seed = mc.decrypt_base64_to_string(&hash).unwrap();
-
-            let mnemonic = Mnemonic::parse(seed.clone()).unwrap();
-            let keypair = Keypair::from_phrase(&mnemonic, None).unwrap();
-            let account_address = keypair.public_key().to_account_id();
-            let account_string = format!("{}", account_address);
-            *account.write() = account_string;
-            *mnemonic_phrase.write() = Some(seed);
-            *phase_exists_in_state.write() = true;
+    let handle_select_account = move |hash: String, address: String| {
+        let mc = new_magic_crypt!(password().unwrap(), 256);
+        match mc.decrypt_base64_to_string(&hash) {
+            Ok(seed) => {
+                *account.write() = address;
+                *mnemonic_phrase.write() = Some(seed);
+                *phase_exists_in_state.write() = true;
+            }
+            Err(e) => {
+                gloo::console::error!("Failed to decrypt seed:", e.to_string());
+                set_error("Failed to decrypt seed".to_string());
+            }
         }
     };
     view! {
         <>
-            <main class="p-6 max-w-2xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+            <main class="p-6 max-w-4xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
                 <div>
-                    <form class="max-w-sm mx-auto" id="seed-submit-form" on:submit=submit_click>
+                    <form class="max-w-sm mx-auto" id="seed-submit-form">
                         <div class="mb-5">
                             <label
                                 for="password"
@@ -77,21 +76,78 @@ pub fn SetPhraseFromPass() -> impl IntoView {
                                 id="password"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
-                                prop:value=move || password().unwrap()
-                                on:input=set_password_input
+                                prop:value=move || password().clone().unwrap_or_default()
+                                on:input= move |e| {
+                                    set_password_input(e);
+                                    set_error(String::new());
+                                }
                             />
-
                         </div>
-
-                        <button
-                            type="submit"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        >
-
-                            Submit
-                        </button>
-
                     </form>
+                    <div>
+
+                    {move || {
+                        if !error().is_empty() {
+                            view! {
+                                <div
+                                    role="alert"
+                                    class="flex  p-4 items-center gap-3 border-l-4 border-yellow-500 bg-yellow-100 text-yellow-800 rounded-xl shadow-md dark:bg-yellow-900 dark:text-yellow-200"
+                                >
+                                    {error()}
+                                </div>
+                            }
+                                .into_view()
+                                .into_any()
+                        } else {
+                            view! { <></> }.into_view().into_any()
+                        }
+                    }}
+                    </div>
+
+                    {move || {
+                        if let Ok(ref pwd) = password() {
+                            if !pwd.is_empty() {
+                                view! {
+                                    <div class="mt-6 max-w-4xl mx-auto">
+                                        <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+                                            Select Account
+                                        </h3>
+                                        <ul class="space-y-2">
+                                            {move || {
+                                                account_store.with(|store| {
+                                                    store.accounts.iter().map(|a| {
+                                                        let hash = a.hash.clone();
+                                                        let address = a.account_address.clone();
+                                                        let name = a.name.clone();
+
+                                                        view! {
+                                                            <li>
+                                                                <button
+                                                                    type="button"
+                                                                    class="w-full text-left p-2 rounded-md hover:bg-blue-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                                                                    on:click=move |_| {
+
+                                                                            handle_select_account(hash.clone(), address.clone());
+
+                                                                    }
+                                                                >
+                                                                    {name.clone()} : {address.clone()}
+                                                                </button>
+                                                            </li>
+                                                        }
+                                                    }).collect::<Vec<_>>()
+                                                })
+                                            }}
+                                        </ul>
+                                    </div>
+                                }.into_any()
+                            } else {
+                                ().into_any()
+                            }
+                        } else {
+                            ().into_any()
+                        }
+                    }}
                 </div>
             </main>
         </>

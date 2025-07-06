@@ -4,6 +4,7 @@ use crate::components::signing::enter_pass_with_nav::EnterPassWithNav;
 
 use crate::components::common_transaction::balance_transfer::BalanceTransfer;
 use crate::components::schelling_game::positive_externality::create_post::CreatePositiveExternalityPost;
+use crate::components::signing::delete_account::DeleteAccount;
 use crate::pages::home::Home;
 use leptos::prelude::*;
 use leptos_router::components::*;
@@ -23,6 +24,7 @@ pub fn RouterApp() -> impl IntoView {
                     view=CreatePositiveExternalityPost
                 />
                 <Route path=path!("/balance-transfer") view=BalanceTransfer />
+                <Route path=path!("/delete-account") view=DeleteAccount />
             </Routes>
         </Router>
     }

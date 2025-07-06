@@ -1,6 +1,6 @@
 use crate::components::common::global_state::{GlobalState, GlobalStateStoreFields};
 use crate::components::navigation::nav::Nav;
-use crate::components::signing::accounts_store::AccountStore;
+use crate::components::signing::accounts_store::{Account, AccountStore};
 use codee::string::JsonSerdeCodec;
 use leptos::ev::SubmitEvent;
 use leptos::prelude::*;
@@ -15,10 +15,11 @@ pub fn AddAccount() -> impl IntoView {
     let state = expect_context::<Store<GlobalState>>();
 
     let account = state.account_state();
-    let (_account_store, set_account_store, _reset_account_store) =
+    let (account_store, set_account_store, _reset_account_store) =
         use_local_storage::<AccountStore, JsonSerdeCodec>("account-store-state");
     let (seed, set_seed) = signal("".to_string());
     let (password, set_password) = signal("".to_string());
+    let (name, set_name) = signal("".to_string());
     let (confirm_password, set_confirm_password) = signal(String::from(""));
     let (form_submission, set_form_submission) = signal(true);
     let (error_message, set_error_message) = signal(String::from(""));
@@ -37,13 +38,29 @@ pub fn AddAccount() -> impl IntoView {
         if !is_valid() {
             set_error_message("Passwords do not match.".to_string());
         } else {
-            set_account_store.update(|acct| {
-                acct.hash = Some(base64);
-                acct.account_address = Some(account_string.clone());
+            let account_exists = account_store.with(|store| {
+                store
+                    .accounts
+                    .iter()
+                    .any(|a| a.account_address == account_string.clone())
             });
 
-            *account.write() = account_string;
-            set_form_submission(false);
+            if account_exists {
+                set_error_message("This account already exists.".to_string());
+            } else {
+                let new_account = Account {
+                    hash: base64,
+                    account_address: account_string.clone(),
+                    name: name().clone(),
+                };
+
+                set_account_store.update(move |store| {
+                    store.accounts.push(new_account);
+                });
+
+                *account.write() = account_string;
+                set_form_submission(false);
+            }
         }
     };
 
@@ -74,7 +91,27 @@ pub fn AddAccount() -> impl IntoView {
                                             placeholder="Enter the seed"
                                             required
                                             prop:value=move || seed()
-                                            on:input=move |e| set_seed(event_target_value(&e))
+                                            on:input=move |e| {set_seed(event_target_value(&e));
+                                            set_error_message(String::new());}
+                                        />
+                                    </div>
+
+                                    <div class="mb-5">
+                                        <label
+                                            for="name"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                        >
+                                            Account Name
+                                        </label>
+                                        <input
+                                            type="name"
+                                            id="name"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Enter a Name"
+                                            required
+                                            prop:value=move || name()
+                                            on:input=move |e| {set_name(event_target_value(&e));
+                                            }
                                         />
                                     </div>
                                     <div class="mb-5">
@@ -182,9 +219,20 @@ pub fn AddAccount() -> impl IntoView {
                                         ></path>
                                     </svg>
                                     <span class="text-gray-900 dark:text-white">
-                                        "Sign in successful.".
+                                        "Adding Account successful.".
                                     </span>
                                 </div>
+                                <ul>
+                                    {move || account_store.with(|s| {
+                                        s.accounts.iter().map(|a| {
+                                            view! {
+                                                <li class="text-gray-900 dark:text-white">
+                                                    {a.account_address.clone()}
+                                                </li>
+                                            }
+                                        }).collect::<Vec<_>>()
+                                    })}
+                                </ul>
 
                             </div>
                         </>
