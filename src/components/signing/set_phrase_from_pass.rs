@@ -26,7 +26,7 @@ pub fn SetPhraseFromPass() -> impl IntoView {
     let state = expect_context::<Store<GlobalState>>();
     let (error, set_error) = signal("".to_string());
 
-    let account = state.account_state();
+    let account = state.account_address();
     let mnemonic_phrase = state.mnemonic_phrase();
     let phase_exists_in_state = state.phase_exists_in_state();
     let (account_store, _set_account_store, _reset_account_store) =
@@ -77,7 +77,7 @@ pub fn SetPhraseFromPass() -> impl IntoView {
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required
                                 prop:value=move || password().clone().unwrap_or_default()
-                                on:input= move |e| {
+                                on:input=move |e| {
                                     set_password_input(e);
                                     set_error(String::new());
                                 }
@@ -86,22 +86,22 @@ pub fn SetPhraseFromPass() -> impl IntoView {
                     </form>
                     <div>
 
-                    {move || {
-                        if !error().is_empty() {
-                            view! {
-                                <div
-                                    role="alert"
-                                    class="flex  p-4 items-center gap-3 border-l-4 border-yellow-500 bg-yellow-100 text-yellow-800 rounded-xl shadow-md dark:bg-yellow-900 dark:text-yellow-200"
-                                >
-                                    {error()}
-                                </div>
+                        {move || {
+                            if !error().is_empty() {
+                                view! {
+                                    <div
+                                        role="alert"
+                                        class="flex  p-4 items-center gap-3 border-l-4 border-yellow-500 bg-yellow-100 text-yellow-800 rounded-xl shadow-md dark:bg-yellow-900 dark:text-yellow-200"
+                                    >
+                                        {error()}
+                                    </div>
+                                }
+                                    .into_view()
+                                    .into_any()
+                            } else {
+                                view! { <></> }.into_view().into_any()
                             }
-                                .into_view()
-                                .into_any()
-                        } else {
-                            view! { <></> }.into_view().into_any()
-                        }
-                    }}
+                        }}
                     </div>
 
                     {move || {
@@ -114,33 +114,39 @@ pub fn SetPhraseFromPass() -> impl IntoView {
                                         </h3>
                                         <ul class="space-y-2">
                                             {move || {
-                                                account_store.with(|store| {
-                                                    store.accounts.iter().map(|a| {
-                                                        let hash = a.hash.clone();
-                                                        let address = a.account_address.clone();
-                                                        let name = a.name.clone();
+                                                account_store
+                                                    .with(|store| {
+                                                        store
+                                                            .accounts
+                                                            .iter()
+                                                            .map(|a| {
+                                                                let hash = a.hash.clone();
+                                                                let address = a.account_address.clone();
+                                                                let name = a.name.clone();
 
-                                                        view! {
-                                                            <li>
-                                                                <button
-                                                                    type="button"
-                                                                    class="w-full text-left p-2 rounded-md hover:bg-blue-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
-                                                                    on:click=move |_| {
-
-                                                                            handle_select_account(hash.clone(), address.clone());
-
-                                                                    }
-                                                                >
-                                                                    {name.clone()} : {address.clone()}
-                                                                </button>
-                                                            </li>
-                                                        }
-                                                    }).collect::<Vec<_>>()
-                                                })
+                                                                view! {
+                                                                    <li>
+                                                                        <button
+                                                                            type="button"
+                                                                            class="w-full text-left p-2 rounded-md hover:bg-blue-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                                                                            on:click=move |_| {
+                                                                                handle_select_account(hash.clone(), address.clone());
+                                                                            }
+                                                                        >
+                                                                            {name.clone()}
+                                                                            :
+                                                                            {address.clone()}
+                                                                        </button>
+                                                                    </li>
+                                                                }
+                                                            })
+                                                            .collect::<Vec<_>>()
+                                                    })
                                             }}
                                         </ul>
                                     </div>
-                                }.into_any()
+                                }
+                                    .into_any()
                             } else {
                                 ().into_any()
                             }

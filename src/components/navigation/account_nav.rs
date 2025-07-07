@@ -23,7 +23,7 @@ extern "C" {
 pub fn AccountNav() -> impl IntoView {
     let state = expect_context::<Store<GlobalState>>();
 
-    let account = state.account_state();
+    let account = state.account_address();
 
     let UseClipboardReturn {
         is_supported,

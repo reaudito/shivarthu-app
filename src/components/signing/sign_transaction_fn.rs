@@ -30,7 +30,7 @@ pub fn SignTransactionFn(tx: Box<dyn subxt::tx::Payload>) -> impl IntoView {
 
     let (transaction_event, set_transaction_event) = signal(String::from(""));
 
-    let account = state.account_state();
+    let account = state.account_address();
     let mnemonic_phrase = state.mnemonic_phrase();
     let phase_exists_in_state = state.phase_exists_in_state();
     let tx = Rc::new(tx);
@@ -61,21 +61,20 @@ pub fn SignTransactionFn(tx: Box<dyn subxt::tx::Payload>) -> impl IntoView {
                             }
                         };
 
-                        let mut result = api
+                        let result = api
                             .tx()
                             .sign_and_submit_then_watch_default(&tx_clone, &keypair)
-                            .await
-                            .unwrap();
+                            .await;
 
-                        // let mut result = match result {
-                        //     Ok(r) => r,
-                        //     Err(e) => {
-                        //         set_transaction_status(format!(
-                        //             "Failed to submit transaction: {e}"
-                        //         ));
-                        //         return;
-                        //     }
-                        // };
+                        let mut result = match result {
+                            Ok(r) => r,
+                            Err(e) => {
+                                set_transaction_status(format!(
+                                    "Failed to submit transaction: {e}"
+                                ));
+                                return;
+                            }
+                        };
 
                         while let Some(status) = result.next().await {
                             match status.unwrap() {

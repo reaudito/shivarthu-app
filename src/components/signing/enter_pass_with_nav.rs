@@ -7,6 +7,10 @@ pub fn EnterPassWithNav() -> impl IntoView {
     view! {
         <>
             <Nav />
+
+            <div class="flex justify-center">
+                <h2 class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">"Sign In with Password"</h2>
+            </div>
             <SetPhraseFromPass />
         </>
     }

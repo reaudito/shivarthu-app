@@ -23,6 +23,11 @@ For Android development, run:
   cargo tauri android dev
 ```
 
+Build
+```
+cargo tauri build
+```
+
 
 
 ## Tailwindcss

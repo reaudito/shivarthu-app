@@ -84,8 +84,10 @@ pub fn AddAccount() -> impl IntoView {
                                             placeholder="Enter the seed"
                                             required
                                             prop:value=move || seed()
-                                            on:input=move |e| {set_seed(event_target_value(&e));
-                                            set_error_message(String::new());}
+                                            on:input=move |e| {
+                                                set_seed(event_target_value(&e));
+                                                set_error_message(String::new());
+                                            }
                                         />
                                     </div>
 
@@ -103,7 +105,8 @@ pub fn AddAccount() -> impl IntoView {
                                             placeholder="Enter a Name"
                                             required
                                             prop:value=move || name()
-                                            on:input=move |e| {set_name(event_target_value(&e));
+                                            on:input=move |e| {
+                                                set_name(event_target_value(&e));
                                             }
                                         />
                                     </div>
@@ -216,15 +219,21 @@ pub fn AddAccount() -> impl IntoView {
                                     </span>
                                 </div>
                                 <ul>
-                                    {move || account_store.with(|s| {
-                                        s.accounts.iter().map(|a| {
-                                            view! {
-                                                <li class="text-gray-900 dark:text-white">
-                                                    {a.account_address.clone()}
-                                                </li>
-                                            }
-                                        }).collect::<Vec<_>>()
-                                    })}
+                                    {move || {
+                                        account_store
+                                            .with(|s| {
+                                                s.accounts
+                                                    .iter()
+                                                    .map(|a| {
+                                                        view! {
+                                                            <li class="text-gray-900 dark:text-white">
+                                                                {a.account_address.clone()}
+                                                            </li>
+                                                        }
+                                                    })
+                                                    .collect::<Vec<_>>()
+                                            })
+                                    }}
                                 </ul>
 
                             </div>
