@@ -129,6 +129,7 @@ pub fn SetPhraseFromPass() -> impl IntoView {
                                                                         <button
                                                                             type="button"
                                                                             class="w-full text-left p-2 rounded-md hover:bg-blue-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white"
+                                                                            id={format!("account-{}", address.clone())}
                                                                             on:click=move |_| {
                                                                                 handle_select_account(hash.clone(), address.clone());
                                                                             }
