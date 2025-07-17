@@ -1,4 +1,3 @@
-use crate::components::common::spinner::LoadingSpinner;
 use crate::components::signing::sign_transaction_fn::SignTransactionFn;
 use crate::services::common_services::polkadot;
 use leptos::prelude::*;

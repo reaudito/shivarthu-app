@@ -23,7 +23,7 @@ async fn load_data(user_to_calculate: String, set_end_period: WriteSignal<Option
 pub fn CommitEndBlock(user_to_calculate: String) -> impl IntoView {
     let (end_period, set_end_period) = signal::<Option<u32>>(None);
 
-    let action: Action<(String, WriteSignal<Option<u32>>), (), LocalStorage> = Action::new_unsync(
+    let action: Action<(String, WriteSignal<Option<u32>>), ()> = Action::new_unsync(
         |(user_to_calculate, set_end_period): &(String, WriteSignal<Option<u32>>)| {
             let user_to_calculate = user_to_calculate.clone();
             let set_end_period = set_end_period.clone();

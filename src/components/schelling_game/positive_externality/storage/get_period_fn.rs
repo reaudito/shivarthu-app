@@ -50,14 +50,13 @@ async fn load_data(user_to_calculate: String, set_period: WriteSignal<Option<Per
 pub fn get_period_fn(user_to_calculate: String) -> ReadSignal<Option<Period>> {
     let (period, set_period) = signal::<Option<Period>>(None);
 
-    let action: Action<(String, WriteSignal<Option<Period>>), (), LocalStorage> =
-        Action::new_unsync(
-            |(user_to_calculate, set_period): &(String, WriteSignal<Option<Period>>)| {
-                let user_to_calculate = user_to_calculate.clone();
-                let set_period = set_period.clone();
-                async move { load_data(user_to_calculate, set_period).await }
-            },
-        );
+    let action: Action<(String, WriteSignal<Option<Period>>), ()> = Action::new_unsync(
+        |(user_to_calculate, set_period): &(String, WriteSignal<Option<Period>>)| {
+            let user_to_calculate = user_to_calculate.clone();
+            let set_period = set_period.clone();
+            async move { load_data(user_to_calculate, set_period).await }
+        },
+    );
 
     action.dispatch((user_to_calculate.clone(), set_period));
 
