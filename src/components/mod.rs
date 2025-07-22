@@ -4,4 +4,5 @@ pub mod common_transaction;
 pub mod markdown;
 pub mod navigation;
 pub mod schelling_game;
+pub mod shared_storage;
 pub mod signing;

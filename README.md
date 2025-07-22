@@ -77,3 +77,14 @@ Format all .rs files ending with `_test.rs` within the examples directory
 ## Format a file
 
 `rustfmt src/main.rs `
+
+## Metadata download
+
+```bash
+cargo install subxt-cli
+```
+
+```bash
+subxt metadata -f bytes > metadata.scale
+
+```

@@ -51,6 +51,8 @@ pub fn Nav() -> impl IntoView {
 fn navbar_items() -> impl IntoView {
     let (submenu_open, set_submenu_open) = signal(false);
 
+    let (work_wins_open, set_work_wins_open) = signal(false);
+
     let toggle_dark_mode = move |_| {
         let document = web_sys::window().unwrap().document().unwrap();
         let document_element = document.document_element().unwrap();
@@ -76,7 +78,7 @@ fn navbar_items() -> impl IntoView {
                     on:click=move |_| set_submenu_open.update(|n| *n = !*n)
                     class="block w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
-                    "Pages"
+                    "Accounts"
                     <svg
                         class="inline w-4 h-4 ml-2"
                         xmlns="http://www.w3.org/2000/svg"
@@ -135,18 +137,61 @@ fn navbar_items() -> impl IntoView {
                     </a>
 
                     <a
-                        href="/create-positive-externality-post"
+                        href="/address-submission"
                         class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     >
-                        "Create Positive Externality Post"
+                        "Address Submission"
                     </a>
 
+
                 </div>
+                </div>
+
+                <div class="relative">
+                    <button
+                        on:click=move |_| set_work_wins_open.update(|n| *n = !*n)
+                        class="block w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                        "Work and Wins"
+                        <svg
+                            class="inline w-4 h-4 ml-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 10 6"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M1 1l4 4 4-4"
+                            ></path>
+                        </svg>
+                    </button>
+                    <div class=move || {
+                        if work_wins_open.get() {
+                            "relative w-full mt-2 space-y-1 bg-white rounded shadow dark:bg-gray-800 lg:absolute lg:w-auto"
+                        } else {
+                            "hidden"
+                        }
+                    }>
+
+                        <a
+                            href="/work-wins/create-post"
+                            class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >
+                        "Positive Work Post"
+                        </a>
+
+
+                    </div>
             </div>
 
             <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                 <AccountNav />
             </div>
+
+
 
             <a
                 href="/sign-in"

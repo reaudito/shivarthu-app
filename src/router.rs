@@ -4,6 +4,7 @@ use crate::components::signing::enter_pass_with_nav::EnterPassWithNav;
 
 use crate::components::common_transaction::balance_transfer::BalanceTransfer;
 use crate::components::schelling_game::positive_externality::create_post::CreatePositiveExternalityPost;
+use crate::components::shared_storage::address_submission::AddressSubmission;
 use crate::components::signing::delete_account::DeleteAccount;
 use crate::components::signing::sign_out::SignOut;
 use crate::pages::home::Home;
@@ -21,12 +22,13 @@ pub fn RouterApp() -> impl IntoView {
                 <Route path=path!("/sign-in") view=EnterPassWithNav />
                 <Route path=path!("/add-account") view=AddAccount />
                 <Route
-                    path=path!("/create-positive-externality-post")
+                    path=path!("/work-wins/create-post")
                     view=CreatePositiveExternalityPost
                 />
                 <Route path=path!("/balance-transfer") view=BalanceTransfer />
                 <Route path=path!("/delete-account") view=DeleteAccount />
                 <Route path=path!("/sign-out") view=SignOut />
+                <Route path=path!("/address-submission") view=AddressSubmission />
             </Routes>
         </Router>
     }
