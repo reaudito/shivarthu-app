@@ -1,5 +1,9 @@
-use crate::components::navigation::nav::Nav;
+use crate::components::shared_storage::address_submission_sign_in::SignTransaction;
 use crate::services::common_imp::View;
+use crate::{
+    components::navigation::nav::Nav,
+    services::common_services::polkadot::shared_storage::calls::types::save_address::City,
+};
 use leptos::ev::SubmitEvent;
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -16,6 +20,9 @@ pub enum AddressError {
 
     #[error("Country is required and must be ≤ 64 characters")]
     InvalidCountry,
+
+    #[error("City is required and must be ≤ 64 characters")]
+    InvalidCity,
 
     #[error("Latitude must be between -90 and 90")]
     InvalidLatitude,
@@ -43,26 +50,26 @@ pub struct SubmittedAddress {
 // Success Component
 // -----------------------------
 
-#[component]
-pub fn ConfirmAddressSubmission(
-    district: String,
-    country: String,
-    latitude: Option<f64>,
-    longitude: Option<f64>,
-) -> impl IntoView {
-    view! {
-        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
-            <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">"Confirm Address Submission"</h3>
-            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
-                <li><strong>"District:"</strong> {district}</li>
-                <li><strong>"Country:"</strong> {country}</li>
-                <li><strong>"Latitude:"</strong> {move || latitude.map(|v| v.to_string()).unwrap_or("N/A".to_string())}</li>
-                <li><strong>"Longitude:"</strong> {move || longitude.map(|v| v.to_string()).unwrap_or("N/A".to_string())}</li>
-            </ul>
-            <p class="mt-4 text-green-600 dark:text-green-400">"Ready to submit!"</p>
-        </div>
-    }
-}
+// #[component]
+// pub fn ConfirmAddressSubmission(
+//     district: String,
+//     country: String,
+//     latitude: Option<f64>,
+//     longitude: Option<f64>,
+// ) -> impl IntoView {
+//     view! {
+//         <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+//             <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">"Confirm Address Submission"</h3>
+//             <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+//                 <li><strong>"District:"</strong> {district}</li>
+//                 <li><strong>"Country:"</strong> {country}</li>
+//                 <li><strong>"Latitude:"</strong> {move || latitude.map(|v| v.to_string()).unwrap_or("N/A".to_string())}</li>
+//                 <li><strong>"Longitude:"</strong> {move || longitude.map(|v| v.to_string()).unwrap_or("N/A".to_string())}</li>
+//             </ul>
+//             <p class="mt-4 text-green-600 dark:text-green-400">"Ready to submit!"</p>
+//         </div>
+//     }
+// }
 
 // -----------------------------
 // Main Component
@@ -75,6 +82,8 @@ pub fn AddressSubmission() -> impl IntoView {
     // Form fields — now using f64 directly wrapped in Result
     let (district, set_district) = signal(Ok(String::new()));
     let (country, set_country) = signal(Ok(String::new()));
+    let (city, set_city) = signal(Ok(String::new()));
+
     let (latitude, set_latitude) = signal(Ok(None)); // Result<Option<f64>, _>
     let (longitude, set_longitude) = signal(Ok(None)); // Result<Option<f64>, _>
 
@@ -85,6 +94,7 @@ pub fn AddressSubmission() -> impl IntoView {
         // Force reactivity by reading signals
         let has_errors = district().is_err()
             || country().is_err()
+            || city().is_err()
             || latitude().is_err()
             || longitude().is_err();
 
@@ -117,6 +127,13 @@ pub fn AddressSubmission() -> impl IntoView {
         let val = event_target_value(&ev);
         let result = validate_text(&val, 64, AddressError::InvalidCountry);
         set_country(result);
+    };
+
+    // City input
+    let on_input_city = move |ev| {
+        let val = event_target_value(&ev);
+        let result = validate_text(&val, 64, AddressError::InvalidCity);
+        set_city(result);
     };
 
     // Latitude parser
@@ -188,6 +205,7 @@ pub fn AddressSubmission() -> impl IntoView {
                                     type="text"
                                     id="district"
                                     prop:value=move || district().clone().unwrap_or_default()
+                                    required
                                     on:input=on_input_district
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="E.g. Manhattan"
@@ -206,9 +224,29 @@ pub fn AddressSubmission() -> impl IntoView {
                                     type="text"
                                     id="country"
                                     prop:value=move || country().clone().unwrap_or_default()
+                                    required
                                     on:input=on_input_country
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="E.g. USA"
+                                />
+                            </div>
+
+                            // City input
+                            <div class="mb-5">
+                                <label
+                                    for="city"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    "City"
+                                </label>
+                                <input
+                                    type="text"
+                                    id="city"
+                                    prop:value=move || city().clone().unwrap_or_default()
+                                    required
+                                    on:input=on_input_city
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="E.g. New York"
                                 />
                             </div>
 
@@ -292,14 +330,16 @@ pub fn AddressSubmission() -> impl IntoView {
             View::Success => {
                 let dist = district().ok();
                 let ctr = country().ok();
+                let city = city().ok();
                 let lat = latitude().ok().flatten();
                 let lon = longitude().ok().flatten();
 
                 view! {
                     <div class="container mx-auto px-10 py-8">
-                        <ConfirmAddressSubmission
+                        <SignTransaction
                             district=dist.unwrap_or_default()
                             country=ctr.unwrap_or_default()
+                            city=city.unwrap_or_default()
                             latitude=lat
                             longitude=lon
                         />
