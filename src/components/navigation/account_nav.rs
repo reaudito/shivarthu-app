@@ -65,7 +65,11 @@ pub fn AccountNav() -> impl IntoView {
                 } else {
                     view! {
                         <>
-                            <div></div>
+                        <a
+                            href="/sign-in"
+                        >
+                            "Sign In"
+                        </a>
                         </>
                     }
                         .into_any()

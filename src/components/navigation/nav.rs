@@ -2,6 +2,7 @@ use crate::components::navigation::account_nav::AccountNav;
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{window, HtmlElement};
+use crate::components::navigation::balance::Balance;
 
 #[component]
 pub fn Nav() -> impl IntoView {
@@ -52,6 +53,8 @@ fn navbar_items() -> impl IntoView {
     let (submenu_open, set_submenu_open) = signal(false);
 
     let (work_wins_open, set_work_wins_open) = signal(false);
+
+    let (balance_open, set_balance_open) = signal(false);
 
     let toggle_dark_mode = move |_| {
         let document = web_sys::window().unwrap().document().unwrap();
@@ -187,9 +190,46 @@ fn navbar_items() -> impl IntoView {
                     </div>
             </div>
 
-            <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                <AccountNav />
+            <div class="relative">
+                <button
+                    on:click=move |_| set_balance_open.update(|n| *n = !*n)
+                    class="block w-full text-left py-2 px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                >
+                    <AccountNav />
+                    <svg
+                        class="inline w-4 h-4 ml-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                    >
+                        <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M1 1l4 4 4-4"
+                        ></path>
+                    </svg>
+                </button>
+                <div class=move || {
+                    if balance_open.get() {
+                        "relative w-full mt-2 space-y-1 bg-white rounded shadow dark:bg-gray-800 lg:absolute lg:w-auto"
+                    } else {
+                        "hidden"
+                    }
+                }>
+
+                    <div
+                        class="block py-2 w-full px-4 text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                        <Balance/>
+                    </div>
             </div>
+            </div>
+
+            // <div class="block py-2 px-4 text-gray-700 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            //     <AccountNav />
+            // </div>
 
 
 

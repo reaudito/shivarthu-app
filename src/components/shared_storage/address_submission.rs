@@ -1,9 +1,6 @@
+use crate::components::navigation::nav::Nav;
 use crate::components::shared_storage::address_submission_sign_in::SignTransaction;
 use crate::services::common_imp::View;
-use crate::{
-    components::navigation::nav::Nav,
-    services::common_services::polkadot::shared_storage::calls::types::save_address::City,
-};
 use leptos::ev::SubmitEvent;
 use leptos::prelude::*;
 use serde::{Deserialize, Serialize};

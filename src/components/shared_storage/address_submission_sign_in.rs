@@ -1,6 +1,5 @@
 use crate::components::signing::sign_transaction_fn::SignTransactionFn;
 use crate::services::common_services::polkadot;
-use crate::services::common_services::polkadot::shared_storage::calls::types::save_address::City;
 use leptos::prelude::*;
 
 #[component]
